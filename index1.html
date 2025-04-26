@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image Gallery</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;700&display=swap" />
+    <style>
+@import url("https://fonts.googleapis.com/css2?family=Jost:wght@400;700&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Jost", sans-serif;
+}
+
+.slider-container {
+    width: 100%;
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 1200px;
+    position: relative;
+    overflow: hidden; /* Prevents content overflow */
+}
+
+.slider-images {
+    display: flex;
+    align-items: center;
+    gap: 21px;
+    transition: transform 0.5s ease-in-out;
+}
+
+.slider-img {
+    width: 90px;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.7s ease;
+    overflow: hidden;
+    transform: translateZ(-100px);
+    transform-origin: center;
+}
+
+.slider-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.slider-images .slider-img:nth-child(1),
+.slider-images .slider-img:nth-child(3) {
+    height: 480px;
+}
+
+.slider-images .slider-img:nth-child(2) {
+    height: 560px;
+}
+
+h1 {
+    font-size: 2.5vw; /* Use responsive font sizes */
+    font-weight: 700;
+    text-transform: uppercase;
+    color: maroon;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: rotate(270deg);
+    transition: all 0.7s ease;
+    white-space: nowrap;
+}
+
+.slider-img.active h1 {
+    transform: rotate(0deg);
+    left: 50%;
+    top: 20px;
+    transform: translateX(-50%);
+}
+
+.details {
+    position: absolute;
+    bottom: 43px;
+    left: 20px; /* Adjusted to ensure visibility */
+    z-index: 10;
+}
+
+.details h2 {
+    font-size: 1.8vw; /* Use responsive font sizes */
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.details p {
+    font-size: 1vw; /* Use responsive font sizes */
+    color: #fff;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.slider-img.active .details h2,
+.slider-img.active .details p {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.5s;
+}
+
+.slider-img.active {
+    width: 66vw; /* Use vw for responsive sizing */
+    height: 70vh; /* Use vh for responsive sizing */
+    transform: translateZ(100px) rotateY(0deg);
+    box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.5);
+}
+
+.slider-img:hover {
+    transform: translateZ(50px) rotateY(-15deg);
+    box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+.nav-button {
+    position: absolute;
+    top: 50%;
+    width: 50px;
+    height: 50px;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    border-radius: 50%;
+    z-index: 20;
+}
+
+.prev-button {
+    left: 10px; /* Adjust to keep inside viewport */
+}
+
+.next-button {
+    right: 10px; /* Adjust to keep inside viewport */
+}
+
+.personal-enter {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    background-color: #fff;
+    color: #000;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.personal-enter:hover {
+    background-color: #000;
+    color: #fff;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 1200px) {
+    .slider-img.active {
+        width: 55vw; /* Adjust width responsively */
+        height: 60vh;
+    }
+
+    h1 {
+        font-size: 3vw;
+    }
+}
+
+@media (max-width: 992px) {
+    .slider-img.active {
+        width: 50vw;
+        height: 50vh;
+    }
+
+    h1 {
+        font-size: 2.5vw;
+    }
+}
+
+@media (max-width: 768px) {
+    .slider-container {
+        flex-direction: column;
+        padding: 10px; /* Add padding for spacing */
+    }
+
+    .slider-img {
+        width: 80px; /* Adjust smaller sizes */
+        transform: translateZ(-80px);
+    }
+
+    .slider-img.active {
+        width: 45vw; /* Smaller width for narrow screens */
+        height: 40vh;
+    }
+
+    .nav-button {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+
+    h1 {
+        font-size: 2.2vw;
+        left: 0;
+    }
+}
+
+@media (max-width: 576px) {
+    .slider-img {
+        width: 80px;
+        transform: translateZ(-70px);
+    }
+
+    .slider-img.active {
+        width: 40vw;
+        height: 35vh;
+    }
+
+    .nav-button {
+        width: 35px;
+        height: 35px;
+        font-size: 18px;
+    }
+
+    .personal-enter {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+
+    h1 {
+        font-size: 2vw;
+        left: -15px;
+    }
+}
+
+@media (max-width: 400px) {
+    .slider-img.active {
+        width: 35vw;
+        height: 30vh;
+    }
+
+    h1 {
+        font-size: 1.8vw;
+        left: -20px;
+    }
+
+    .details h2 {
+        font-size: 3vw;
+    }
+
+    .details p {
+        font-size: 2.5vw;
+    }
+
+    .nav-button {
+        width: 30px;
+        height: 30px;
+        font-size: 16px;
+    }
+
+    .personal-enter {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: black;
+    padding: 15px;
+    color: #fff;
+    font-size: 23px !important; /* Use !important to override conflicting styles */
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.navbar .logo img {
+    width: 80px;
+    height: auto;
+    margin-top: 10px;
+    margin-right: 20px;
+    border-radius: 6px;
+}
+
+.nav-menu {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+    gap: 20px; /* Increased gap between menu items */
+}
+
+.nav-menu li {
+    position: relative;
+}
+
+.nav-menu a {
+    color: #fff;
+    text-decoration: none;
+    padding: 5px 10px;
+    display: block;
+}
+
+.nav-menu a:hover,
+.nav-menu a.active {
+    color: yellow;
+}
+
+.nav-menu .dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #f5f5f5;
+    display: none;
+    min-width: 200px;
+    z-index: 1;
+}
+
+.nav-menu .dropdown a {
+    padding: 10px;
+    display: block;
+    color: #333;
+    font-size: 18px;
+    text-decoration: none;
+}
+
+.nav-menu .dropdown a:hover {
+    border: 2px solid #ffcc00;
+}
+
+.nav-menu li:hover .dropdown {
+    display: block;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+}
+
+.search-bar input {
+    padding: 5px;
+    border: none;
+    border-radius: 5px 0 0 5px;
+    height: 35px;
+    width: 200px;
+    font-size: 14px;
+}
+
+.search-bar button {
+    padding: 5px 10px;
+    border: none;
+    background-color: #ffcc00;
+    color: #3f3c39;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    height: 45px;
+    width: 50px;
+}
+
+.search-bar button:hover {
+    background-color: #ff6f61;
+}
+
+.navbar .heart-icon {
+    font-size: 24px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+/* Responsive adjustments for navbar */
+@media (max-width: 1024px) {
+    .navbar {
+        padding: 10px;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar .logo img {
+        width: 60px;
+    }
+
+    .search-bar input {
+        width: 150px;
+    }
+
+    .search-bar button {
+        width: 40px;
+    }
+}
+
+/* Footer */
+footer {
+    background-color: #000;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    font-size: 23px; /* Increased font size */
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+.footer-nav {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+}
+
+.footer-nav li {
+    display: inline;
+    margin: 0 10px;
+}
+
+.footer-nav a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.social-media-footer {
+    margin: 20px 0;
+}
+
+.social-media-footer a {
+    margin: 0 10px;
+}
+
+/* Responsive adjustments for footer */
+@media (max-width: 480px) {
+    footer {
+        font-size: 14px; /* Responsive footer text */
+    }
+}
+
+navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: black;
+    padding: 15px;
+    color: #fff;
+    font-size: 23px !important; /* Use !important to override conflicting styles */
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.navbar .logo img {
+    width: 80px;
+    height: auto;
+    margin-top: 10px;
+    margin-right: 20px;
+    border-radius: 6px;
+}
+
+.nav-menu {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+    gap: 20px; /* Increased gap between menu items */
+}
+
+.nav-menu li {
+    position: relative;
+}
+
+.nav-menu a {
+    color: #fff;
+    text-decoration: none;
+    padding: 5px 10px;
+    display: block;
+}
+
+.nav-menu a:hover,
+.nav-menu a.active {
+    color: yellow;
+}
+
+.nav-menu .dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #f5f5f5;
+    display: none;
+    min-width: 200px;
+    z-index: 1;
+}
+
+.nav-menu .dropdown a {
+    padding: 10px;
+    display: block;
+    color: #333;
+    font-size: 18px;
+    text-decoration: none;
+}
+
+.nav-menu .dropdown a:hover {
+    border: 2px solid #ffcc00;
+}
+
+.nav-menu li:hover .dropdown {
+    display: block;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+}
+
+.search-bar input {
+    padding: 5px;
+    border: none;
+    border-radius: 5px 0 0 5px;
+    height: 35px;
+    width: 200px;
+    font-size: 14px;
+}
+
+.search-bar button {
+    padding: 5px 10px;
+    border: none;
+    background-color: #ffcc00;
+    color: #3f3c39;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    height: 45px;
+    width: 50px;
+}
+
+.search-bar button:hover {
+    background-color: #ff6f61;
+}
+
+.navbar .heart-icon {
+    font-size: 24px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+
+
+
+    </style>
+</head>
+<header>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-ECZhfVK6YyZnvSCAcRXuS1to6a3W-7Hc7g&s" alt="logo">
+        </div>
+        <ul class="nav-menu">
+            <li><a href="index.html">Home</a></li>
+            <li>
+                <a href="#">Recipes</a>
+                <div class="dropdown">
+                    <a href="#breakfast">Breakfast</a>
+                    <a href="#lunch">Lunch</a>
+                    <a href="#dinner">Dinner</a>
+                    <a href="#dessert">Dessert</a>
+                    <a href="#drink">Drink</a>
+                    <a href="#snacks">Snacks & Appetizers</a>
+                    <a href="#holiday">Holiday & Seasonal Recipes</a>
+                    <a href="#diet">Recipes by Diet</a>
+                    <a href="#method">Recipe by Method</a>
+                    <a href="#ingredient">Recipe by Ingredient</a>
+                    <a href="#time-ease">Recipe by Time & Ease</a>
+                    <a href="#cuisine">Recipe by Cuisine</a>
+                    <a href="#view-all">View All</a>
+                </div>
+            </li>
+            <li>
+                <a href="#">Easy Pastas</a>
+                <div class="dropdown">
+                    <a href="#quick-dinner">Quick Dinner</a>
+                    <a href="#easy-healthy">Easy & Healthy</a>
+                    <a href="#quick-vegetarian">Quick Vegetarian</a>
+                    <a href="#easy-pastas">Easy Pastas</a>
+                    <a href="#easy-chicken">Easy Chicken</a>
+                    <a href="#view-all">View All</a>
+                </div>
+            </li>
+            <li>
+                <a href="#">Table</a>
+                <div class="dropdown">
+                    <a href="#recent">Most Recent</a>
+                    <a href="#news-trends">News & Trends</a>
+                    <a href="#voices">Voices</a>
+                    <a href="#groceries">Groceries</a>
+                    <a href="#features">Features</a>
+                    <a href="#view-all">View All</a>
+                </div>
+            </li>
+            <li>
+                <a href="#">Holidays & Seasons</a>
+                <div class="dropdown">
+                    <a href="#retro-summer">Our Favorite Retro Summer Baking Recipes</a>
+                    <a href="#back-school">Back-to-School Dinner Solutions</a>
+                    <a href="#labor-day">Labor Day Recipes</a>
+                    <a href="#view-all">View All</a>
+                </div>
+            </li>
+            <li><a href="#">About Us</a></li>
+        </ul>
+        <div class="search-bar">
+        <input type="text" id="search-bar" placeholder="Search recipes...">
+            <button class="search">🔍</button>
+        </div>
+        <a href="re.html"><button class="heart-icon">❤️</button></a>
+    </nav>
+</header>
+
+
+<body>
+    <section class="slider-container">
+        <div class="slider-images">
+            <div class="slider-img active">
+                <img src="https://img.freepik.com/premium-photo/greek-salad-product-studio-photo-dark-black-background-fresh-tomato-onion-salad-generative-ai-illustration_74760-1254.jpg" alt="1">
+                <h1>Veg</h1>
+                <div class="details">
+                    <!-- Details for Chines -->
+                </div>
+                <a href="vegcon2.html"><button class="personal-enter">Enter</button></a>
+            </div>
+            <div class="slider-img">
+                <img src="https://png.pngtree.com/thumb_back/fw800/background/20231012/pngtree-delicious-chicken-tikka-a-tempting-culinary-delight-against-a-textured-gray-image_13630142.png" alt="2">
+                <h1>Non-Veg</h1>
+                <div class="details">
+                    <!-- Details for Japanis -->
+                </div>
+                <a href="nonveg.html"><button class="personal-enter">Enter</button></a>
+            </div>
+            <div class="slider-img">
+                <img src="https://m.media-amazon.com/images/I/61CEJqTPkfL.jpg" alt="3">
+                <h1>Sweets</h1>
+                <div class="details">
+                    <!-- Details for India -->
+                </div>
+                <a href="sweetcon.html"><button class="personal-enter">Enter</button></a>
+            </div>
+        </div>
+        <button class="nav-button prev-button">&lt;</button>
+        <button class="nav-button next-button">&gt;</button>
+        <a href="index.html"><button class="home1">Home</button></a>
+    </section>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const sliderImages = document.querySelectorAll('.slider-img');
+            const prevButton = document.querySelector('.prev-button');
+            const nextButton = document.querySelector('.next-button');
+            let currentIndex = 0;
+    
+            function updateSlide() {
+                sliderImages.forEach((img, index) => {
+                    img.classList.toggle('active', index === currentIndex);
+                });
+    
+                // Disable/Enable buttons based on current index
+                prevButton.disabled = currentIndex === 0;
+                nextButton.disabled = currentIndex === sliderImages.length - 1;
+            }
+    
+            nextButton.addEventListener('click', function () {
+                if (currentIndex < sliderImages.length - 1) {
+                    currentIndex++;
+                    updateSlide();
+                }
+            });
+    
+            prevButton.addEventListener('click', function () {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    updateSlide();
+                }
+            });
+    
+            // Initial setup
+            updateSlide();
+        });
+    </script>
+</body>
+
+</html>
